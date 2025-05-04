@@ -1,0 +1,27 @@
+# Hugo build output (ignore if NOT using submodule)
+# /public/                 # NIE używamy tego wpisu, bo `public/` to submoduł!
+
+# Backup files
+*.bak
+*~
+
+# OS / Editor / IDE stuff
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (jeśli używasz JS tooling, np. PostCSS)
+node_modules/
+dist/
+
+# Logs & temp
+*.log
+.cache/
+hugo_stats.json
+
+# Deployment scripts, jeśli masz tokeny
+.env
+.env.*
