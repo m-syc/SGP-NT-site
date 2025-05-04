@@ -1,26 +1,41 @@
-baseURL = "https://m-syc.github.io/"
-title = "Wydarzenie – 8 Dni"
+baseURL = "https://localhost:1313/"
+baseURLProduction = "https://m-syc.github.io/sgp-nt/"
+
+title = "SGP-NT"
+languageCode = "en"
 theme = "blowfish"
-languageCode = "pl"
 enableRobotsTXT = true
+defaultContentLanguage = "en"
+relativeURLs = true
+canonifyURLs = true
 
 [params]
 defaultTheme = "light"
 showBackToTop = true
+enableSearch = true
+homepage.showRecent = false
+disableImageOptimization = true
+
+[Environment]
+  [Environment.production]
+  baseURL = "https://m-syc.github.io/sgp-nt/"
+
+  [Environment.development]
+  baseURL = "https://localhost:1313/"
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true  # pozwala na <img>, <iframe> itp.
 
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
 
-[[menu.main]]
-name = "Dzień 1"
-url = "/training1/"
-weight = 1
 
 [[menu.main]]
-name = "Dzień 2"
-url = "/training2/"
-weight = 2
+name = "Converter"
+url = "/converter"
+weight = 4

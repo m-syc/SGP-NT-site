@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Konwerter współrzędnych</title>
+  <meta name="description" content="Konwertuj współrzędne między formatami: DMS, DD.dddddd i DD° MM.mmmm′">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 800px; margin: auto; }
+    textarea { width: 100%; font-family: monospace; }
+    h2, h3 { margin-top: 2rem; }
+    label { font-weight: bold; }
+    p { margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+
+  <h1>Konwerter współrzędnych</h1>
+  <div id="coordinate-converter">
+    <label for="input">Wprowadź współrzędne (np. 50° 03' 59.123"N, 019° 56' 02.456"E lub 50.066423, 19.934015):</label><br>
+    <textarea id="input" rows="3"></textarea><br><br>
+
+    <h3>Wyniki</h3>
+    <p><strong>DMS:</strong> <span id="out-dms"></span></p>
+    <p><strong>DD.dddddd:</strong> <span id="out-decimal"></span></p>
+    <p><strong>DD° MM.mmmm′:</strong> <span id="out-mm-mmmm"></span></p>
+  </div>
+
+ <script>
+    function parseInput(input) {
+    input = input.trim();
+
+    const dmsRegex = /(\d{1,3})[°*\s]\s*(\d{1,2})['′\s]\s*(\d{1,2}(?:\.\d+)?)[\"″\s]?([NSEW])/gi;
+    const ddmmRegex = /(\d{1,3})[°*\s]\s*(\d{1,2}(?:\.\d+)?)[′']\s*([NSEW])/gi;
+    const decimalRegex = /^-?\d{1,3}(?:\.\d+)?\s*,\s*-?\d{1,3}(?:\.\d+)?$/;
+
+    if (decimalRegex.test(input)) {
+        const [lat, lon] = input.split(',').map(Number);
+        return [
+        decimalToCoord(lat, 'lat'),
+        decimalToCoord(lon, 'lon')
+        ];
+    }
+
+    let matches = [...input.matchAll(dmsRegex)];
+    if (matches.length === 2) {
+        return matches.map(([_, deg, min, sec, dir]) => {
+        const d = parseInt(deg), m = parseInt(min), s = parseFloat(sec);
+        let decimal = d + m / 60 + s / 3600;
+        if (dir === 'S' || dir === 'W') decimal *= -1;
+        return decimalToCoord(decimal, dir === 'N' || dir === 'S' ? 'lat' : 'lon');
+        });
+    }
+
+    matches = [...input.matchAll(ddmmRegex)];
+    if (matches.length === 2) {
+        return matches.map(([_, deg, min, dir]) => {
+        const d = parseInt(deg), m = parseFloat(min);
+        let decimal = d + m / 60;
+        if (dir === 'S' || dir === 'W') decimal *= -1;
+        return decimalToCoord(decimal, dir === 'N' || dir === 'S' ? 'lat' : 'lon');
+        });
+    }
+
+    return null;
+    }
+
+    function decimalToCoord(decimal, type) {
+    const dir = type === 'lat'
+        ? (decimal >= 0 ? 'N' : 'S')
+        : (decimal >= 0 ? 'E' : 'W');
+    const abs = Math.abs(decimal);
+    const deg = Math.floor(abs);
+    const min = (abs - deg) * 60;
+    const fullMin = Math.floor(min);
+    const sec = (min - fullMin) * 60;
+    return {
+        decimal,
+        deg,
+        min: fullMin,
+        sec,
+        mm_mmmm: min,
+        dir
+    };
+    }
+
+    function formatDMS(coord) {
+    return `${coord.deg}° ${coord.min}' ${coord.sec.toFixed(3)}″${coord.dir}`;
+    }
+
+    function formatDDmmmmm(coord) {
+    return `${coord.deg}° ${coord.mm_mmmm.toFixed(4)}′${coord.dir}`;
+    }
+
+    function formatDecimal(coord) {
+    return coord.decimal.toFixed(6);
+    }
+
+    function autoConvert() {
+    const input = document.getElementById('input').value;
+    const parsed = parseInput(input);
+    if (!parsed) {
+        document.getElementById('out-dms').innerText = 'Nie rozpoznano formatu.';
+        document.getElementById('out-decimal').innerText = '';
+        document.getElementById('out-mm-mmmm').innerText = '';
+        return;
+    }
+
+    const [lat, lon] = parsed;
+
+    document.getElementById('out-dms').innerText =
+    `${formatDMS(lat)}, ${formatDMS(lon)}`;
+    document.getElementById('out-decimal').innerText =
+        `${formatDecimal(lat)}, ${formatDecimal(lon)}`;
+    document.getElementById('out-mm-mmmm').innerText =
+        `${formatDDmmmmm(lat)}, ${formatDDmmmmm(lon)}`;
+    }
+    document.getElementById('input').addEventListener('input', autoConvert);
+
+    </script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 # Hugo build output (ignore if NOT using submodule)
-# /public/                 # NIE używamy tego wpisu, bo `public/` to submoduł!
+/public/
 
 # Backup files
 *.bak

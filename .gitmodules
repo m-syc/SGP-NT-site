@@ -1,6 +1,3 @@
-[submodule "public"]
-	path = public
-	url = https://github.com/m-syc/sgp-nt
 	branch = main
 [submodule "themes/blowfish"]
 	path = themes/blowfish
