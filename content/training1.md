@@ -1,5 +1,5 @@
 ---
-title: "Dzień 1"
+title: "Training 1"
 ---
 
 ## Plan

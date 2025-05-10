@@ -1,5 +1,5 @@
 ---
-title: "Dzień 1"
+title: "Race 1"
 ---
 
 ## Plan
@@ -13,3 +13,7 @@ title: "Dzień 1"
 |---------|------------------|
 | 10:00   | Rejestracja      |
 | 11:00   | Otwarcie         |
+
+## Zadania
+
+- [ ] zadanie 1 <!-- data-id="race1-zadanie1" -->

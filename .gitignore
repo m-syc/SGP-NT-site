@@ -1,5 +1,5 @@
 # Hugo build output (ignore if NOT using submodule)
-# /public/                 # NIE używamy tego wpisu, bo `public/` to submoduł!
+/public/
 
 # Backup files
 *.bak
@@ -25,3 +25,4 @@ hugo_stats.json
 # Deployment scripts, jeśli masz tokeny
 .env
 .env.*
+config/_default/params.toml
